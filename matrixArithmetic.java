@@ -1,24 +1,36 @@
 import java.util.*;
 
-public class matrixArithmetic {
+public class MatrixArithmetic {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		// last working version: http://pastebin.com/4uULmWpm
 		// http://pastebin.com/yC7YWPZq
+		// damn that's fast: http://imgur.com/a/3DN6u
 		Scanner s = new Scanner(System.in);
 
 		System.out.println("Welcome, what would you like to do next (add, subtract, scalar, multiply)");
 		String input = s.nextLine();
-		if (input.toLowerCase().equals("scalar")) {
+		String inputChars[] = input.split("");
+
+		String scalar = "scalar";
+		String add = "add";
+		String subtract = "subtract";
+		String multiply = "multiply";
+		String rref = "rref";
+
+		if (checkSpelling(inputChars, scalar)) {
 			scalar();
-		} else if (input.toLowerCase().equals("add")) {
+		} else if (checkSpelling(inputChars, add)) {
 			add();
-		} else if (input.toLowerCase().equals("subtract")) {
+		} else if (checkSpelling(inputChars, subtract)) {
 			subtract();
-		} else if (input.toLowerCase().equals("multiply")) {
+		} else if (checkSpelling(inputChars, multiply)) {
 			multiply();
+		} else if (checkSpelling(inputChars, rref)) {
+			rref();
 		} else if (input.toLowerCase().equals("stop") || input.toLowerCase().equals("close")) {
+
 			System.out.println("exited");
 			s.close();
 			return;
@@ -30,37 +42,38 @@ public class matrixArithmetic {
 		s.close();
 	}
 
+	public static boolean checkSpelling(String[] userInput, String check) {
+		boolean status = false;
+		
+		int validityCounter = 0;
+		int checkLastChar = check.length()-1;
+		int inputLastChar = userInput.length-1;
+		 
+		String checkChar[] = check.split("");
+		if (userInput[0].contains(checkChar[0]))
+			validityCounter++;
+		if (userInput[inputLastChar].contains((checkChar[checkLastChar])))
+			validityCounter++;
+		
+		if (validityCounter >= 2) {
+			status = true;
+		}
+		return status;
+	}
+
 	public static void printMatrix(ArrayList<Integer> matrix, int rows, int columns) {
 		int totMatrix = rows * columns;
 		for (int i = 0; i < totMatrix; i++) {
-			if (checkDigitPrint(matrix, i) && (i + 1) % columns == 0) {
-				System.out.print("|  " + matrix.get(i) + "  |" + "\n");
-			} else if (checkDigitPrint(matrix, i)) {
-				System.out.print("|  " + matrix.get(i) + "  ");
-			} else if ((i + 1) % columns == 0) {
-				System.out.print("|  " + matrix.get(i) + "   |" + "\n");
-			} else if (rows == 1) {
-				System.out.print("|  " + matrix.get(i) + "   "); // buggy when
-																	// printing
-																	// one row
-																	// matrix
+			if ((i + 1) % columns == 0) {
+				// System.out.print("| " + matrix.get(i) + " |" + "\n");
+				System.out.printf("| %5s |" + "\n", matrix.get(i));
 			} else {
-				System.out.print("|  " + matrix.get(i) + "   ");
+				// System.out.print("| " + matrix.get(i) + " ");
+				System.out.printf("| %5s ", matrix.get(i));
+
 			}
 		}
 		System.out.println();
-	}
-
-	public static boolean checkDigitPrint(ArrayList<Integer> matrix, int i) {
-		boolean doubleDigits = false;
-		int temp = matrix.get(i);
-		int digits = (int) (Math.floor(Math.log10(temp)) + 1);
-		if (digits > 1) {
-			doubleDigits = true;
-
-		}
-		return doubleDigits;
-
 	}
 
 	public static void scalar() {
@@ -212,7 +225,6 @@ public class matrixArithmetic {
 		int jeanFactorLessThan = 0;
 		boolean checkJeanFactor = rows2 < columns2;
 		boolean checkRow2Equals1 = rows2 == 1;
-		System.out.println(checkRow2Equals1);
 		ArrayList<Integer> addMatrix = new ArrayList<Integer>();
 		for (int i = 0; i < matrixOutputCount; i++) {
 			if (rows > 1 && iteration % matrix2Count == 0 && iteration > 1) {
@@ -250,10 +262,14 @@ public class matrixArithmetic {
 		}
 		s.close();
 		long endTime = System.nanoTime();
-		System.out.println("Took " + (endTime - startTime) + " ns");
+		System.out.println("Took " + (endTime - startTime) + " nanoseconds");
 		System.out.println("Result");
 		printMatrix(addMatrix, rows, columns2);
 
+	}
+
+	public static void rref() {
+		System.out.println("in development");
 	}
 
 	@SuppressWarnings("resource")
