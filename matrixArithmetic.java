@@ -8,7 +8,7 @@ public class MatrixArithmetic {
 		// http://pastebin.com/yC7YWPZq
 		// damn that's fast: http://imgur.com/a/3DN6u
 		Scanner s = new Scanner(System.in);
-
+//ROW COUNTER STILL BUGGY
 		System.out.println("Welcome, what would you like to do next (add, subtract, scalar, multiply)");
 		String input = s.nextLine();
 		String inputChars[] = input.split("");
@@ -24,7 +24,7 @@ public class MatrixArithmetic {
 		} else if (checkSpelling(inputChars, add)) {
 			add();
 		} else if (checkSpelling(inputChars, subtract)) {
-			subtract();
+			subtract();	
 		} else if (checkSpelling(inputChars, multiply)) {
 			multiply();
 		} else if (checkSpelling(inputChars, rref)) {
@@ -47,12 +47,12 @@ public class MatrixArithmetic {
 		
 		int validityCounter = 0;
 		int checkLastChar = check.length()-1;
-		int inputLastChar = userInput.length-1;
+		int inputLastChar = userInput.length-1;	
 		 
 		String checkChar[] = check.split("");
-		if (userInput[0].contains(checkChar[0]))
+		if (userInput[0].toLowerCase().contains(checkChar[0].toLowerCase()))
 			validityCounter++;
-		if (userInput[inputLastChar].contains((checkChar[checkLastChar])))
+		if (userInput[inputLastChar].toLowerCase().contains((checkChar[checkLastChar].toLowerCase())))
 			validityCounter++;
 		
 		if (validityCounter >= 2) {
@@ -63,8 +63,9 @@ public class MatrixArithmetic {
 
 	public static void printMatrix(ArrayList<Integer> matrix, int rows, int columns) {
 		int totMatrix = rows * columns;
+		int counter = 1;
 		for (int i = 0; i < totMatrix; i++) {
-			if ((i + 1) % columns == 0) {
+			if ((counter) % columns == 0) {
 				// System.out.print("| " + matrix.get(i) + " |" + "\n");
 				System.out.printf("| %5s |" + "\n", matrix.get(i));
 			} else {
@@ -72,7 +73,10 @@ public class MatrixArithmetic {
 				System.out.printf("| %5s ", matrix.get(i));
 
 			}
+			counter++;
 		}
+
+	
 		System.out.println();
 	}
 
@@ -80,16 +84,28 @@ public class MatrixArithmetic {
 
 		System.out.println("Multiply a matrix by a scalar\n");
 
-		Scanner s = new Scanner(System.in);
+			Scanner s = new Scanner(System.in);
 		System.out.print("Matrix dimensions\n Matrix Rows:");
 		int rows = Integer.parseInt(s.nextLine());
 		System.out.print(" Matrix Columns:");
 		int columns = Integer.parseInt(s.nextLine());
 		int totMatrix = rows * columns;
 		ArrayList<Integer> matrix = new ArrayList<Integer>();
-		for (int i = 1; i <= totMatrix; i++)
-			matrix.add(getMatrix(rows, columns, i));
-
+		int rowNum = 1;
+		for (int i = 1; i <= totMatrix; i++){
+			matrix.add(getMatrix(rows, columns, i, rowNum));
+			int mod = i % columns;
+			if (mod == 0)rowNum++;  
+		}
+		
+		/*int position = 1;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				getMatrix(rows, columns, position, (i+1), (j+1));
+				position++;
+			}
+		}*/
+		
 		printMatrix(matrix, rows, columns);
 
 		Scanner a = new Scanner(System.in);
@@ -122,9 +138,12 @@ public class MatrixArithmetic {
 		int columns = Integer.parseInt(s.nextLine());
 		int totMatrix = rows * columns;
 		ArrayList<Integer> matrix = new ArrayList<Integer>();
-		for (int i = 1; i <= totMatrix; i++)
-			matrix.add(getMatrix(rows, columns, i));
-
+		int rowNum = 1;
+		for (int i = 1; i <= totMatrix; i++){
+			matrix.add(getMatrix(rows, columns, i, rowNum));
+			int mod = i % columns;
+			if (mod == 0)rowNum++;  
+		}
 		System.out.print("Second matrix dimensions\n Matrix Rows:");
 		int rows2 = Integer.parseInt(s.nextLine());
 		System.out.print(" Matrix Columns:");
@@ -133,18 +152,15 @@ public class MatrixArithmetic {
 		ArrayList<Integer> matrix2 = new ArrayList<Integer>();
 		if (totMatrix != totMatrix2) {
 			System.out.println("Please enter two matricies with the same dimensions");
-			System.out.println("Try again (yes, no)?");
-			String input = t.nextLine();
-			if (input.toLowerCase().equals("yes")) {
-				add();
-			} else {
 				System.exit(1);
-			}
 		}
 
-		for (int i = 1; i <= totMatrix2; i++)
-			matrix2.add(getMatrix(rows2, columns2, i));
-
+		int rowNum2 = 1;
+		for (int i = 1; i <= totMatrix2; i++){
+			matrix2.add(getMatrix(rows2, columns2, i, rowNum2));
+			int mod = i % columns2;
+			if (mod == 0)rowNum2++;  
+		}
 		System.out.println("First Matrix");
 		printMatrix(matrix, rows, columns);
 		System.out.println("Second Matrix");
@@ -178,8 +194,12 @@ public class MatrixArithmetic {
 		int columns = Integer.parseInt(s.nextLine());
 		int totMatrix = rows * columns;
 		ArrayList<Integer> matrix = new ArrayList<Integer>();
-		for (int i = 1; i <= totMatrix; i++)
-			matrix.add(getMatrix(rows, columns, i));
+		int rowNum = 1;
+		for (int i = 1; i <= totMatrix; i++){
+			matrix.add(getMatrix(rows, columns, i, rowNum));
+			int mod = i % columns;
+			if (mod == 0)rowNum++;  
+		}
 
 		System.out.print("Second matrix dimensions\n Matrix Rows:");
 		int rows2 = Integer.parseInt(s.nextLine());
@@ -204,8 +224,12 @@ public class MatrixArithmetic {
 			}
 		}
 
-		for (int i = 1; i <= totMatrix2; i++)
-			matrix2.add(getMatrix(rows2, columns2, i));
+		int rowNum2 = 1;
+		for (int i = 1; i <= totMatrix2; i++){
+			matrix2.add(getMatrix(rows2, columns2, i, rowNum2));
+			int mod = i % columns2;
+			if (mod == 0)rowNum2++;  
+		}
 
 		System.out.println("First Matrix");
 		printMatrix(matrix, rows, columns);
@@ -269,7 +293,7 @@ public class MatrixArithmetic {
 	}
 
 	public static void rref() {
-		System.out.println("in development");
+		System.out.println("in development, see \"MatrixRREF\" class");
 	}
 
 	@SuppressWarnings("resource")
@@ -286,9 +310,12 @@ public class MatrixArithmetic {
 		int columns = Integer.parseInt(s.nextLine());
 		int totMatrix = rows * columns;
 		ArrayList<Integer> matrix = new ArrayList<Integer>();
-		for (int i = 1; i <= totMatrix; i++)
-			matrix.add(getMatrix(rows, columns, i));
-
+		int rowNum = 1;
+		for (int i = 1; i <= totMatrix; i++){
+			matrix.add(getMatrix(rows, columns, i, rowNum));
+			int mod = i % columns;
+			if (mod == 0)rowNum++;  
+		}
 		System.out.print("Second matrix dimensions\n Matrix Rows:");
 		int rows2 = Integer.parseInt(s.nextLine());
 		System.out.print(" Matrix Columns:");
@@ -297,17 +324,15 @@ public class MatrixArithmetic {
 		ArrayList<Integer> matrix2 = new ArrayList<Integer>();
 		if (totMatrix != totMatrix2) {
 			System.out.println("Please enter two matricies with the same dimensions");
-			System.out.println("Try again (yes, no)?");
-			String input = t.nextLine();
-			if (input.toLowerCase().equals("yes")) {
-				subtract();
-			} else {
-				System.exit(1);
-			}
+			System.exit(1);
 		}
 
-		for (int i = 1; i <= totMatrix2; i++)
-			matrix2.add(getMatrix(rows2, columns2, i));
+		int rowNum2 = 1;
+		for (int i = 1; i <= totMatrix2; i++){
+			matrix2.add(getMatrix(rows2, columns2, i, rowNum2));
+			int mod = i % columns2;
+			if (mod == 0)rowNum2++;  
+		}
 
 		System.out.println("First Matrix");
 		printMatrix(matrix, rows, columns);
@@ -328,15 +353,22 @@ public class MatrixArithmetic {
 	}
 
 	@SuppressWarnings("resource")
-	public static int getMatrix(int rows, int columns, int i) {
+	public static int getMatrix(int rows, int columns, int i, int rowNum) {
 		int tempValue = 0;
 		int columnNum = 0;
-		int rowNum = 1;
+		//int rowNum = 1;
 		Scanner a = new Scanner(System.in);
 		columnNum = (i % columns == 0) ? (columns) : (i % columns);
-		if (i >= 2 && i % columns == 1) {
-			rowNum++;
-		}
+		/*int mod = i % columns;
+		if (mod == 0) {
+			rowNum++;   // ROW COUNTER STILL BUGGY
+		}*/
+		/*for ( i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				 getNewMatrix(rows, columns, position, (i+1), (j+1));
+				position++;
+			}
+		}*/
 		System.out.print("Row " + rowNum + " Column " + columnNum + ": ");
 		tempValue = a.nextInt();
 		// DONT CLOSE THE SCANNER OTHERWISE IT WILL THROW A
@@ -344,5 +376,6 @@ public class MatrixArithmetic {
 		// http://stackoverflow.com/questions/15423519/issue-with-scanners-and-java-util-nosuchelementexception-no-line-found-at-jav
 		return tempValue;
 	}
+	
 
 }
